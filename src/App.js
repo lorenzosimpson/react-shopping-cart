@@ -4,7 +4,7 @@ import data from './data';
 
 // Contexts
 import { ProductContext } from './contexts/ProductContext';
-import { CartContext, CardContext } from './contexts/CartContext';
+import { CartContext } from './contexts/CartContext';
 
 
 // Components
@@ -18,16 +18,19 @@ function App() {
 
 	const addItem = item => {
 		// add the given item to the cart
-		setCart([...cart, item])
+		if(!cart.includes(item)) {
+			setCart(prevState => [...prevState, item])
+		}
 	};
-	// const removeItem = item => {
-	// 	setCart([...cart])
-	// }
+	const removeItem = item => {
+		// Set state to whatever it was before and return the items where the id does not match another id
+		setCart(prevState => prevState.filter(cartItem => cartItem.id !== item.id))
+	}
 
 	return (
 		<div className="App">
 			<ProductContext.Provider value={{ products, addItem }}> 
-				<CartContext.Provider value={cart}>
+				<CartContext.Provider value={{cart, removeItem}}>
 
 					<Navigation />
 
